@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>math_game</title>
+    
+</head>
+<script>
+    var number=[0,0,0,0,0,0,0,0,0];
+    var numid=['n0','n2','n4','n7','n8'];
+    var blank=[0,0,0];
+
+    var ansid1=['a1','a2','a3','a4','a5','a6'];
+    var answer=new Array(6);
+    var seperatequestion = [1,1,1,1,1,1,1,1,1];
+    var correct= new Array(6);
+
+    var fbid=['fb1','fb2','fb3','fb4','fb5','fb6'];
+    var feedback=new Array(6);
+
+    function quest(){
+        do{
+            do{
+                number[0]=Math.floor(Math.random()*50);
+            }while(number[0]<6);
+            do{
+                number[1]=Math.floor(Math.random()*50);
+            }while(number[1]==0);
+
+            number[2]=number[0]*number[1];
+            do{
+                number[3]=Math.floor(Math.random()*number[0]);
+            }while(number[0]%number[3]!=0);
+            do{
+                number[4]=Math.floor(Math.random()*50);
+                number[5]=number[3]*number[4];
+            }while(number[2]<number[5] || number[2]%number[5]!=0);
+            number[6]=number[0]/number[3];
+            number[7]=number[1]*number[4];
+            number[8]=number[2]/number[5];
+        }while(number[6]*number[7]!=number[8] || number[2]/number[8]!=number[5]);
+        do{
+            blank[0]=Math.floor(Math.random()*50);
+            blank[1]=Math.floor(Math.random()*50);            
+        }while(blank[0]<blank[1] || blank[0]%blank[1]!=0);
+        blank[2]=blank[0]/blank[1];
+
+        document.getElementById("n0").innerHTML=(number[0]);
+        document.getElementById("n2").innerHTML=(number[2]);
+        document.getElementById("n4").innerHTML=(number[4]);
+        document.getElementById("n7").innerHTML=(number[7]);
+        document.getElementById("n8").innerHTML=(number[8]);
+        document.getElementById("blank0").innerHTML=(blank[0]+"/"+blank[1]);
+    }
+    function check(){
+        seperatequestion[0]=0;
+        seperatequestion[2]=0;
+        seperatequestion[4]=0;
+        seperatequestion[7]=0;
+        seperatequestion[8]=0;
+        for(var i=0;i<ansid1.length;i++){
+            answer[i]=document.getElementById(ansid1[i]).value;
+        }
+        for(var i=0;i<correct.length;i++){
+            for(var j=0;j<seperatequestion.length;j++){
+                if(seperatequestion[j]==1){
+                    correct[i]=number[j];
+                    seperatequestion[j]=0;
+                    break;
+                }
+            }
+        }
+        correct[4]=correct[5]=blank[2];
+        for(var i=0;i<answer.length;i++){
+            feedback[i]=document.getElementById(fbid[i]);
+            if(answer[i]==correct[i]){
+                feedback[i].innerHTML=("第"+(i+1)+"題:Correct!");
+            }else{
+                feedback[i].innerHTML=("第"+(i+1)+"題:INCorrect!");
+            }
+        }
+        var btn=document.getElementById("bt0");
+        btn.disabled=true;
+    }
+    function restart(){
+        var btn=document.getElementById("bt0");
+        btn.disabled=false;
+        quest();
+        for(var i=0;i<answer.length;i++){
+            feedback[i]=document.getElementById(fbid[i]);
+            feedback.innerHTML='';
+            document.getElementById(ansid1[i]).value="";
+        }
+
+    }
+
+
+
+
+</script>
+<body  onload="quest();">
+
+ <!--   <font face="DFKai-sb">
+        <b>Homework 10 (2023/10/25)</b>
+    </font>
+-->
+    <font face="DFKai-sb" color="darkslategray">
+        <p><b><h3>表格數字遊戲</h3></b></p>
+    </font>
+<!--    <font face="DFKai-sb" color="#483D8B">
+        姓名:<br>學號:<br>系年:
+    </font>
+-->	
+	
+	<br>
+	提示 : 請填入正確的數字，若周圍皆是符號，無運算子，則以等號為主(請忽略----)
+	<br>
+	
+    <table border height="500" width="500" style="text-align:center; font-size:35px; font-family:serif;" align='center' valign='middle' >
+        <tr>
+            <td><span id="n0"></span></td>              <!--num0-->
+            <td>x</td>
+            <td>(1)<input type="text" id="a1" size=3>   <!--num1-->
+            </td>
+            <td>=</td>
+            <td><span id="n2"></span></td>              <!--num2-->
+        </tr>
+        <tr>
+            <td>÷</td>
+            <td>----</td>
+            <td>x</td>
+            <td>(5)<input type="text" id="a5" size=3>
+            </td>
+            <td>÷</td>
+        </tr>
+        <tr>
+            <td>(2)<input type="text" id="a2" size=3></td>    <!--num3-->
+            <td>x</td>
+            <td><span id="n4"></span></td>                    <!--num4-->
+            <td>=</td>
+            <td>(3)<input type="text" id="a3" size=3>         <!--num5-->
+            </td>
+        </tr>
+        <tr>
+            <td>=</td>
+            <td>(6)<input type="text" id="a6" size=3></td>
+            <td>=</td>
+            <td><span id="blank0"></span></td>
+            <td>=</td>
+        </tr>
+        <tr>
+            <td>(4)<input type="text" id="a4" size=3></td>    <!--num6-->
+            <td>x</td>
+            <td><span id="n7"></span></td>                    <!--num7-->
+            <td>=</td>
+            <td><span id="n8"></span></td>                    <!--num8-->
+        </tr>
+    </table>
+
+    <br>
+    <button onclick="check();" id="bt0">檢查答案</button><button onclick="restart();">換一題</button><br>
+    <span id="fb1"></span><br>
+    <span id="fb2"></span><br>
+    <span id="fb3"></span><br>
+    <span id="fb4"></span><br>
+    <span id="fb5"></span><br>
+    <span id="fb6"></span><br>
+    <br>
+    <br>
+
+
+    </script>
+</body>
+</html>

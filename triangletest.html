@@ -1,0 +1,73 @@
+<html>
+    <script>    
+        var a=0;        //a邊
+        var b=0;        //b邊
+        var c=0;        //c邊
+        var s=0;        //周長的一半
+        var surface=0;  //面積
+        var anglea=0;   //角a
+        var angleb=0;   //角b
+        var anglec=0;   //角c
+
+
+        function getside() {
+            a = parseFloat(document.getElementById("ida").value);
+            b = parseFloat(document.getElementById("idb").value);
+            c = parseFloat(document.getElementById("idc").value);
+        }
+        function calculate(){
+            s = (a+b+c)/2;
+            surface = Math.sqrt(s*(s - a)*(s - b)*(s - c));
+            anglea = Math.round(Math.asin((2*surface)/(b*c))*180/Math.PI);
+            angleb =Math.round(Math.asin((2*surface)/(a*c))*180/Math.PI);
+            anglec =Math.round(Math.asin((2*surface)/(a*b))*180/Math.PI);
+
+            var showside = document.getElementById("idside");
+            var showsurface = document.getElementById("idsurface");
+            var showangle = document.getElementById("idangle");
+
+            showside.innerHTML= "三角形周長:"+2*s;
+            showsurface.innerHTML = "三角形面積:"+surface;
+            showangle.innerHTML = "三角形角度:"+anglea+"°-"+angleb+"°-"+anglec+"° (∠A-∠B-∠C)";
+
+        }
+        function triangletype(){
+            var showtype = document.getElementById("idtriangle");
+            if(a==b && a==c && b==c){
+                showtype.innerHTML = "三角形類型:正三角形";
+            }else if(anglea==angleb || anglea==anglec || angleb==anglec){
+
+                if(anglea==90 || angleb==90 || anglec==90){
+                    showtype.innerHTML = "三角形類型:等腰直角三角形";;
+                }else{
+                    showtype.innerHTML = "三角形類型:等腰三角形";
+                }
+            }else if(anglea>90 || angleb>90 || anglec>90){
+                showtype.innerHTML = "三角形類型:鈍角三角形";
+            }else if(anglea==90 || angleb==90 || anglec==90){
+                showtype.innerHTML = "三角形類型:直角三角形";
+            }else{
+                showtype.innerHTML = "三角形類型:銳角三角形";
+            }
+        }
+        function decide(){
+            if((a+b)>c && (a+c)>b && (b+c)>a){
+                calculate();
+                triangletype();
+
+            }else{
+                alert("這不是三角形");
+            }
+        }
+    </script>
+    <body>
+        a邊長:<input type="number" id="ida"><br>
+        b邊長:<input type="number" id="idb"><br>
+        c邊長:<input type="number" id="idc">
+        <button onclick="getside() ; decide()">check</button><br>
+        <span id="idside"></span><br>
+        <span id="idsurface"></span><br>
+        <span id="idangle"></span><br>
+        <span id="idtriangle"></span>
+    </body>
+</html>
